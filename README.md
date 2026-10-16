@@ -6,8 +6,6 @@
 
 </div>
 
-## 🤖 Data Science + AI
-
 <div align="center">
   <img src="./assets/ds-ai-animation.svg" alt="Data Science AI pipeline: Data to Train to Predict" width="900" />
 </div>
@@ -66,7 +64,7 @@
 
 <p align="center"><sub>🔒 YT MP3 and Minchi Store are private repositories; their links require GitHub access. Minchi Store is a frontend preview, not a live shop.</sub></p>
 
-## 🐍 GitHub Contribution Snake
+## github activity
 
 <div align="center">
   <img src="./assets/contribution-snake.svg" alt="Five-pixel animated snake exploring the GitHub contribution calendar" width="900" />
