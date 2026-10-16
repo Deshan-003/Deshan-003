@@ -64,8 +64,7 @@
 
 <p align="center"><sub>🔒 YT MP3 and Minchi Store are private repositories; their links require GitHub access. Minchi Store is a frontend preview, not a live shop.</sub></p>
 
-## github activity
-
+## Github Activity
 <div align="center">
   <img src="./assets/contribution-snake.svg" alt="Five-pixel animated snake exploring the GitHub contribution calendar" width="900" />
 </div>
