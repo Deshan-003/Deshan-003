@@ -55,9 +55,9 @@
   let parts=[];
   const add=s=>parts.push(s);
   add(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 238" width="900" height="238" role="img" aria-label="${esc(username)} animated contribution snake">`);
-  add('<defs><linearGradient id="b" x2="1" y2="1"><stop stop-color="#091720"/><stop offset="1" stop-color="#091321"/></linearGradient></defs>');
+  add('<defs><linearGradient id="b" x2="1" y2="1"><stop stop-color="#091720"/><stop offset="1" stop-color="#091321"/></linearGradient><filter id="eatenGlow" x="-140%" y="-140%" width="380%" height="380%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="2.6"/></filter></defs>');
   add('<rect width="900" height="238" rx="17" fill="url(#b)"/><rect x="1" y="1" width="898" height="236" rx="16" fill="none" stroke="#254B52"/>');
-  add('<text x="42" y="37" font-family="Arial,sans-serif" font-size="16" letter-spacing="2" font-weight="bold" fill="#BDFDEF">CONTRIBUTION SNAKE</text>');
+  add('<text x="42" y="37" font-family="Arial,sans-serif" font-size="16" letter-spacing="2" font-weight="bold" fill="#BDFDEF">GITHUB ACTIVITY</text>');
   add(`<text x="859" y="37" text-anchor="end" font-family="monospace" font-size="11" fill="#5CAAA5">@${esc(username)}</text>`);
   add('<line x1="42" y1="52" x2="858" y2="52" stroke="#254550"/>');
   for(let y of [1,3,5]) add(`<text x="42" y="${sy(y)}" font-family="monospace" font-size="10" fill="#789CA4">${["","Mon","","Wed","","Fri"][y]}</text>`);
@@ -75,13 +75,24 @@
     }
     add(`<rect x="${sx(x)}" y="${sy(y)}" width="${CELL}" height="${CELL}" rx="2" fill="${pal[d.level]}">${inner}</rect>`);
   }
+  // An eaten contribution becomes a bright, centered mint marker.
+  // Place markers above the calendar grid but beneath the five-segment snake.
+  // SMIL discrete timing keeps the original square hidden until the next loop.
+  for(const [cell,t] of food){
+    const [x,y]=cell.split(",").map(Number);
+    const eat=(t/cycle.length).toFixed(6);
+    const reset=((cycle.length-1)/cycle.length).toFixed(6);
+    const gx=(OX+PITCH*x+0.25).toFixed(2),gy=(OY+PITCH*y+0.25).toFixed(2);
+    const cx=(OX+PITCH*x+2.5).toFixed(2),cy=(OY+PITCH*y+2.5).toFixed(2);
+    add(`<g opacity="0"><rect x="${gx}" y="${gy}" width="10" height="10" rx="4" fill="#52FFAC" opacity="0.95" filter="url(#eatenGlow)"/><rect x="${cx}" y="${cy}" width="5.5" height="5.5" rx="1.5" fill="#B7FFD2" stroke="#ECFFF4" stroke-width="0.75"/><animate attributeName="opacity" dur="${duration}" calcMode="discrete" keyTimes="0;${eat};${reset};1" values="0;1;1;0" repeatCount="indefinite"/></g>`);
+  }
   const colors=["#A1FFF2","#6DEBDC","#38C9BA","#20A49B","#167B7D"];
   for(let k=4;k>=0;k--){
     const values=cycle.map((_,n)=>{const [x,y]=cycle[(n-k+cycle.length)%cycle.length];return `${sx(x)} ${sy(y)}`;}).join(";");
     add(`<g><rect width="${CELL}" height="${CELL}" rx="3" fill="${colors[k]}"/>${k===0?'<circle cx="7" cy="3" r="1" fill="#083C39"/><circle cx="7" cy="7" r="1" fill="#083C39"/>':""}<animateTransform attributeName="transform" type="translate" calcMode="discrete" dur="${duration}" values="${values}" repeatCount="indefinite"/></g>`);
   }
   add('<text x="44" y="217" font-family="monospace" font-size="10.5" fill="#739BA5">52 WEEKS  /  FIVE PIXELS  /  LOOPING</text>');
-  add('<text x="855" y="217" text-anchor="end" font-family="monospace" font-size="10.5" fill="#63CBAF">● REAL CONTRIBUTIONS</text>');
+  add('<text x="855" y="217" text-anchor="end" font-family="monospace" font-size="10.5" fill="#63CBAF">■ MINT DOT = EATEN</text>');
   add("</svg>");
   fs.mkdirSync("assets",{recursive:true});
   fs.writeFileSync("assets/contribution-snake.svg",parts.join("\n")+"\n");
